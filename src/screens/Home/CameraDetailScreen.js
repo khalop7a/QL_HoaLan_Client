@@ -43,6 +43,7 @@ const CameraDetailScreen = ({route, navigation}) => {
         let result = [];
         let kq = [];
         let data = [];
+        let tmp = [];
         //Get dữ liệu
         const datum = new FormData();
         datum.append('name', 'avatar');
@@ -87,14 +88,18 @@ const CameraDetailScreen = ({route, navigation}) => {
         await fetch('https://orchidapp.herokuapp.com/api/orchids')
         .then((response) => response.json())
         .then((responseJson) => {
-            setLoading(false);          
+            setLoading(false);        
+            for(let j = 0; j < responseJson.length; j++) tmp[j] = 0;
             data.forEach(element => {
                 for(let j = 0; j < responseJson.length; j++)          
                 if(responseJson[j].science_name.toUpperCase().indexOf(element.toUpperCase()) !== -1){
                     ok = true;
-                    result.push(responseJson[j]);
+                    if(tmp[j] === 0)
+                        result.push(responseJson[j]);
+                    tmp[j] = 1;
                 }
             });
+            console.log(tmp);
             if (ok) setFlag(false);
             setImagesData(result);
         })
